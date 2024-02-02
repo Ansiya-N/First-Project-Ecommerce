@@ -1,0 +1,214 @@
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: whitesmoke;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-addProduct {
+    text-align: center;
+  }
+
+  .form-addProduct h1 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .error {
+    color: red;
+  }
+
+  .success {
+    color: green;
+  }
+
+  .btn-primary {
+    background-color: green;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background-color: green;
+  }
+</style>
+
+<div class="container">
+  <form class="form-addProduct" action="/admin/add-product" enctype="multipart/form-data" method="post" id="productForm">
+    <h1>Add Products</h1>
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" name="name" required id="nameField" placeholder="Name">
+      <span class="name error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="category">Choose the category</label>
+      <select class="form-control" name="category" required id="categoryField">
+        <option value="">Choose the category</option>
+        <% category.forEach((cat, index) => { %>
+        <option value="<%= cat._id %>"><%= cat.categoryName %></option>
+        <% }) %>
+      </select>
+      <span class="category error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input type="number" name="price" required id="priceField" placeholder="Price">
+      <span class="price error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input type="text" name="description" required id="descriptionField" placeholder="Description">
+      <span class="description error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="image1">Image1</label>
+      <input type="file" name="image1" required id="file1">
+      <span class="file1 error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="image2">Image2</label>
+      <input type="file" name="image2" required id="file2">
+      <span class="file2 error"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="stock">Stock</label>
+      <input type="number" name="stock" required id="stockField" placeholder="Stock">
+      <span class="stock error"></span>
+    </div>
+
+    <div id="errorContainer" style="color: red;"></div>
+    <button type="submit" class="btn btn-primary" id="liveAlertBtn">Submit</button>
+  </form>
+</div>
+<script>
+  
+const form = document.getElementById('productForm');
+const errorContainer = document.getElementById('errorContainer');
+
+const showError = (element, message) => {
+  const errorElement = element.nextElementSibling;
+  errorElement.textContent = message;
+  errorElement.style.color = 'red';
+};
+
+const showSuccess = (element) => {
+  const errorElement = element.nextElementSibling;
+  errorElement.innerHTML = '<i style="color: green;" class="fa-solid fa-circle-check"></i>';
+};
+
+const updateErrorContainer = (message) => {
+  errorContainer.textContent = message;
+  errorContainer.style.color = 'red';
+};
+
+form.addEventListener('change', function (event) {
+  let valid = true;
+  updateErrorContainer('');
+
+  const nameField = document.getElementById('nameField');
+  if (nameField.value.trim() === '') {
+    showError(nameField, 'Name is required');
+    valid = false;
+  } else {
+    showSuccess(nameField);
+  }
+
+  const categoryField = document.getElementById('categoryField');
+  if (categoryField.value.trim() === '') {
+    showError(categoryField, 'Category is required');
+    valid = false;
+  } else {
+    showSuccess(categoryField);
+  }
+
+  const priceField = document.getElementById('priceField');
+  if (isNaN(priceField.value) || priceField.value.trim() === '' || priceField.value <= 0) {
+    showError(priceField, 'Price must be a positive number');
+    valid = false;
+  } else {
+    showSuccess(priceField);
+  }
+
+  const descriptionField = document.getElementById('descriptionField');
+  if (descriptionField.value.trim() === '') {
+    showError(descriptionField, 'Description is required');
+    valid = false;
+  } else {
+    showSuccess(descriptionField);
+  }
+
+  const file1 = document.getElementById('file1');
+  if (file1.files.length === 0) {
+    showError(file1, 'Image1 is required');
+    valid = false;
+  } else {
+    showSuccess(file1);
+  }
+
+  const file2 = document.getElementById('file2');
+  if (file2.files.length === 0) {
+    showError(file2, 'Image2 is required');
+    valid = false;
+  } else {
+    showSuccess(file2);
+  }
+
+  const stockField = document.getElementById('stockField');
+  if (isNaN(stockField.value) || stockField.value.trim() === '' || stockField.value < 1) {
+    showError(stockField, 'Stock must be a non-negative number');
+    valid = false;
+  } else {
+    showSuccess(stockField);
+  }
+
+  if (!valid) {
+    event.preventDefault();
+    updateErrorContainer('Please fill in all required fields correctly.');
+  }
+});
+
+form.addEventListener('submit', function () {
+  // Additional actions upon successful form submission
+});
+
+</script>

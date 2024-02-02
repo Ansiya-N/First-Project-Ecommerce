@@ -1,0 +1,174 @@
+<%- include('../partials/user/userHeader.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+      body {
+          padding-top: 80px; /* Adjust the value based on your navbar height */
+      }
+      /* Style for the dropdown label */
+.checkout__input label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Style for the dropdown */
+/* Style for the dropdown */
+.checkout__input select {
+    position: relative;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, #333 50%), linear-gradient(135deg, #333 50%, transparent 50%);
+    background-position: calc(100% - 20px) calc(1.5em + 2px), calc(100% - 15px) calc(1.5em + 2px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+}
+
+/* Style for the dropdown arrow on hover */
+.checkout__input select:hover {
+    background-image: linear-gradient(45deg, transparent 50%, #555 50%), linear-gradient(135deg, #555 50%, transparent 50%);
+}
+
+
+  </style>
+</head>
+<body>
+
+    
+
+<section style="background-color: #eee;">
+    <h2 style="text-align: center;">User Profile</h2>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                class="rounded-circle img-fluid" style="width: 150px;">
+              <h5 class="my-3"><%= user.name %></h5>
+              
+             
+              
+            </div>
+          </div>
+          <div class="card mb-4 mb-lg-0">
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush rounded-3">
+                    <!-- Existing list items ... -->
+        
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <a href="/vieworderdetails" class="btn btn-success">
+                            <i class="fab fa-twitter fa-lg" style="color: #fff;"></i> View Orders
+                        </a>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <a href="/user/edit-profile/:id" class="btn btn-success">
+                            <i class="fab fa-instagram fa-lg" style="color: #fff;"></i> Edit Profile
+                        </a>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <a href="/user/change-password/:id" class="btn btn-success">
+                            <i class="fab fa-facebook-f fa-lg" style="color: #fff;"></i> Change Password
+                        </a>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                      <a href='/wallet' class="btn btn-success">
+                          <i class="fab fa-facebook-f fa-lg" style="color: #fff;"></i> Wallet
+                      </a>
+                      <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                        <a href='/wishlist' class="btn btn-success">
+                            <i class="fab fa-facebook-f fa-lg" style="color: #fff;"></i> WishList
+                        </a>
+          
+                   </li>
+                </ul>
+            </div>
+        </div>
+        
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Full Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0"><%= user.name %></p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0"><%= user.email %></p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Phone</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0"><%= user.phone %></p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <% if (!userAddresses) { %>
+
+          
+                  <div style="display: flex; justify-content: space-between;">
+                  <h1>No Address Available</h1>
+                  <% } else { %>
+               
+                    <div style="display: flex; justify-content: space-between;"><h2>ADDRESSES</h2>  <a href="/address"><button class="btn-success">Add Address</button></a></div>
+                  
+                  <% userAddresses.addresses.forEach(data => { %>
+                    <div class="card mb-2">
+                      <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                          <div>
+                            <h4 style="font-size: 18px;"><%= data.firstName %> <%= data.lastName %></h4>
+                            <p style="font-size: 14px;">+91 <%= data.phone %></p>
+                            <p style="font-size: 14px; margin-bottom: 5px; "><strong>Address:</strong> <%= data.address %> </p>
+                            <p style="font-size: 14px; margin-bottom: 5px;"><strong>Street Address:</strong> <%= data.streetAddress %> </p>
+                            <p style="font-size: 14px; margin-bottom: 5px;"><strong>Apartment:</strong> <%= data.apartment %> </p>
+                            <p style="font-size: 14px; margin-bottom: 5px;"><strong>City:</strong> <%= data.city %> </p>
+                            <p style="font-size: 14px; margin-bottom: 5px;"><strong>Postcode:</strong> <%= data.postcode %> </p>
+                            <p style="font-size: 14px; margin-bottom: 5px;"><strong>Phone:</strong> <%= data.phone %> </p>
+                            <p style="font-size: 14px; margin-bottom: 5px;"><strong>Email:</strong> <%= data.email %> </p>
+                            
+                          </div>
+                          <div>
+                            <a href="/user/edit-address/<%= data._id %>" class="btn btn-success">Edit</a>
+                            <a href="/user/delete-address/<%= data._id %>"  onclick="return deleteAddress(event)"  class="btn btn-danger">Delete</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% }) %>
+          
+                  <% } %>
+
+                  
+              </div>
+              <hr>
+              
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

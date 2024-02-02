@@ -1,0 +1,223 @@
+
+
+
+<%- include("../partials/user/userHeader") %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Include Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+        .pagination-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pagination-button {
+      /* Add your button styles here */
+      padding: 10px;
+    }
+  
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .order-details {
+            margin-bottom: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+            background-color: #fff;
+            padding: 10px;
+        }
+
+        .order-details:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .order-id {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .order-date {
+            color: #555;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Order Details</h1>
+
+        <% if (orders) { %>
+            <div id="search-results">
+                <% orders.forEach(odr => { %>
+                    <div class="order-details">
+                        <div>
+                            <h5 class="order-id">Order ID: <%= odr._id %></h5>
+                            <p class="order-date">Total Amount:Rs. <%= odr.totalAmount %>/-</p>
+                            <p class="order-date">Order Date: <%= odr.formattedDateOrdered %></p>
+                            <p class="order-date">Delivery Address: <%= odr.address %></p>
+                        </div>
+
+                        <div>
+                            <% odr.items.forEach(item => { %>
+                                <p class="mb-0">Product: <%= item.product.name %></p>
+                                <!-- Add more item details as needed -->
+                            <% }) %>
+                        </div>
+                        <a href="/view-order-details/<%= odr._id %>" class="btn btn-success">View Details</a>
+
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p class="alert alert-danger">Order not found</p>
+        <% } %>
+
+        <!-- Add this at the bottom of your vieworders.ejs file -->
+        <nav class="pagination-container">
+            <button class="pagination-button" id="prev-button" title="Previous page" aria-label="Previous page">
+              &lt;
+            </button>
+    
+            <div id="pagination-numbers">
+              <!-- You may add your pagination numbers here if needed -->
+            </div>
+    
+            <button class="pagination-button" id="next-button" title="Next page" aria-label="Next page">
+              &gt;
+            </button>
+          </nav>
+  
+    </div>
+
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+          let currentPage = 1;
+          const pageSize = 3; // Set your desired page size
+      
+          function fetchOrders(page) {
+            $.ajax({
+              method: 'post',
+              url: '/order-pagination', // Update the endpoint to match your server route
+              data: {
+                page: page,
+                pageSize: pageSize
+              },
+              success: function (res) {
+                const orderList = document.getElementById('search-results');
+      
+                if (res && res.orders.length > 0) {
+                  let orderHTML = '';
+      
+                  res.orders.forEach((order) => {
+                    const formattedDate = new Date(order.dateOrdered).toLocaleDateString();
+                    const address = order.address.address || '';
+                    const street = order.address.streetAddress || '';
+              const city = order.address.city || '';
+              const apartment = order.address.apartment || '';
+              const postcode = order.address.postcode || '';
+              const phone = order.address.phone || '';
+              const email = order.address.email || "";
+              const addressDetails = `${address},${street}, ${city},${apartment},${postcode},${phone},${email}`;
+
+                    // Create an order details section similar to the existing structure
+                    orderHTML += `
+                      <div class="order-details">
+                        <div>
+                          <h5 class="order-id">Order ID: ${order._id}</h5>
+                          <p class="order-date">Total Amount: Rs. ${order.totalPrice}/-</p>
+                          <p class="order-date">Order Date: ${formattedDate}</p>
+            
+                          <p class="order-date">Delivery Address: ${addressDetails}</p>
+                 
+                        </div>
+      
+                        <div>
+                          ${order.items.map(item => `
+                            <p class="mb-0">Product: ${item.product.name}</p>
+                            <!-- Add more item details as needed -->
+                          `).join('')}
+                        </div>
+                        <a href="/view-order-details/${order._id}" class="btn btn-success">View Details</a>
+                      </div>
+                    `;
+                  });
+      
+                  orderList.innerHTML = orderHTML;
+                }
+              },
+              error: function (error) {
+                console.log(error);
+              }
+            });
+          }
+      
+          fetchOrders(currentPage);
+      
+          // Pagination button click event handlers
+          $('#prev-button').on('click', function () {
+            if (currentPage > 1) {
+              currentPage--;
+              fetchOrders(currentPage);
+            }
+          });
+      
+          $('#next-button').on('click', function () {
+            currentPage++;
+            fetchOrders(currentPage);
+          });
+        });
+      </script>
+      
+</body>
+
+</html>

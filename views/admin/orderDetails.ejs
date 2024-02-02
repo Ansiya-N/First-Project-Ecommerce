@@ -1,0 +1,288 @@
+<%- include('../partials/admin/adminHeader.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Order Details</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1 {
+            
+            color: #333;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .order-details {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-details p {
+            margin: 10px 0;
+        }
+
+        .order-details h2 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .order-details table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+       
+
+        .order-details th, .order-details td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .order-details th {
+            background-color: green;
+        }
+
+        .order-status-btn {
+            background-color: green;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .order-status-btn:hover {
+            background-color: green;
+        }
+
+        .order-status-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 160px;
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .order-status-dropdown-content button {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            text-align: left;
+            border: none;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .order-status-dropdown-content button:hover {
+            background-color: #f9f9f9;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <body>
+
+        
+        <h1>Admin - Order Details</h1>
+    
+        <div class="order-details">
+            <!-- User Details Table -->
+            <h2>User Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User Name</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><%= order.userId.name %></td>
+                        <td><%= order.address %></td>
+                    </tr>
+                </tbody>
+            </table>
+    
+            <!-- Order Details Table -->
+            <h2>Order Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order Status</th>
+                        
+                        <th>Order Date</th>
+                        <th>Payment Method</th>
+                        
+                       <% if (!order.canceled) { %>
+                        <td>
+                            <div class="dropdown">
+                                <button class="order-status-btn">Change Status</button>
+                                <div class="order-status-dropdown-content">
+                                    <button>Placed</button>
+                                    <button>Packed</button>
+                                    <button>Shipping</button>
+                                    <button>Out for Delivery</button>
+                                    <button>Delivered</button>
+                                </div>
+                            </div>
+                        </td>
+                       <% }else { %>
+                        <td>
+                        ..
+                        </td>
+                        <% } %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <% if (order && Array.isArray(order.items)) { %>
+                           
+                                <td><%= order._id %></td>
+                              
+                                    <div>
+                                        <% if (order.returnRequest === true) { %><br>
+                                            <% console.log('Return Request:', order.returnRequest); %>
+                                            <p style="color: red; font-size: 20px;"> User Requested for Return </p>
+                                            <a href="/admin/return-approvel/<%= order._id %>"><button class="btn btn-success">Approve</button></a>
+                                            <a href="/admin/decline-return/<%= order._id %>"><button class="btn btn-danger">Decline</button></a>
+                                        <% } %>
+                                    </div>
+                              
+                          
+                        <% } else { %>
+                            <tr>
+                                <td colspan="2">No orders found</td>
+                            </tr>
+                        <% } %>
+                        
+                        
+                        <td><%= order.status %></td>
+                        <td><%= order.formattedDateOrdered %></td>
+                        <td><%= order.paymentMethod %></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <% if (order.returned === true && order.returnApprovel === false) { %>
+             <h3 style="color: red;">User Requested for Returning the Order</h3>
+             <a href="/admin/approve-return/<%= order._id %>" style="color: green;"><button class="btn btn-primary action-button">Approve</button></a>
+           
+             <% }else if(order.returned === true && order.returnApprovel === true){ %>
+                <h3 style="color: green;">Order has sucessfully Returned</h3>
+                <% } %>
+    
+            <!-- Ordered Items Table -->
+            <h2>Ordered Items</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Product Image</th>  
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <% order.items.forEach(item => { %>
+                        <tr>
+                            <td><%= item.product.name %></td>
+                            <td><%= item.quantity %></td>
+                            <td>₹<%= item.product.price %></td>
+                            <td>
+                                <!-- Display Product Image -->
+                                <img src="/uploads/<%= item.product.image1 %>" alt="<%= item.product.name %> Image" style="max-width: 100px; max-height: 100px;">
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+    
+            <div class="status-message"></div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const dropdownContent = document.querySelector('.order-status-dropdown-content');
+          const statusBtn = document.querySelector('.order-status-btn');
+          
+          // Ensure the status-message element is correctly selected
+          const statusMessage = document.querySelector('.status-message');
+      
+          statusBtn.addEventListener('click', function () {
+            dropdownContent.classList.toggle('show');
+          });
+      
+          document.addEventListener('click', function (event) {
+            if (!event.target.matches('.order-status-btn')) {
+              if (dropdownContent.classList.contains('show')) {
+                dropdownContent.classList.remove('show');
+              }
+            }
+          });
+      
+          document.querySelectorAll('.order-status-dropdown-content button').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              const orderId = '<%= order._id %>';
+              const orderStatus = btn.textContent.trim();
+              console.log(orderId, orderStatus);
+      
+              fetch('/admin/updateOrderStatus', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ orderId, orderStatus }),
+              })
+              .then(response => response.json())
+              .then(data => {
+                console.log('Order status updated successfully:', data);
+      
+                // Check if the server responded with an error message
+                if (data.error) {
+                  // Display the error message in the UI
+                  statusMessage.textContent = data.error;
+                  statusMessage.style.color = 'red';
+                } else {
+                  // Clear any previous error messages
+                  statusMessage.textContent = '';
+      
+                  // You can update the UI or perform additional actions here
+                }
+              })
+              .catch(error => console.error('Error updating order status:', error));
+            });
+          });
+        });
+      </script>
+      
+      
+</body>
+</html>

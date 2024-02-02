@@ -1,0 +1,745 @@
+<%- include('../partials/user/userHeader') %>
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ogani | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    
+    <style>
+       
+        #btn{
+            width: 60%;
+        }
+          .checkout__form {
+            display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between
+        }
+
+        .checkout__form h4 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .col-lg-8 {
+            margin-bottom: 20px;
+        }
+
+        .checkout__form label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .checkout__form input[type="checkbox"] {
+            margin-bottom: 10px;
+        }
+
+        .checkout__form button {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .addresslist {
+            flex: 0 0 calc(33.3333% - 20px);
+        }
+
+        .addresslist p {
+            margin: 0;
+            color: #333;
+        }
+
+        .checkout__order {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .checkout__order h4 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .checkout__order ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .checkout__order li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .checkout__order__subtotal,
+        .checkout__order__total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .checkout__input__checkbox {
+            margin-top: 20px;
+        }
+
+        .checkout__order .cart_list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .checkout__order .cart_item {
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .checkout__order .cart_item_info {
+        flex-grow: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .checkout__order .cart_item_name {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .checkout__order .cart_item_price {
+        font-size: 16px;
+        color: #26d7e4;
+    }
+
+    .checkout__order__total {
+        margin-top: 15px;
+        font-weight: bold;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .checkout__order__total span {
+        color: #333;
+        margin-left: 10px; /* Adjust the margin as needed */
+    }
+    .shoping__discount {
+        flex: 0 0 calc(33.3333% - 20px);
+        }
+        #coupon-code {
+    width: 60%; /* Reduce the width to make it smaller */
+    padding: 10px;
+    margin-bottom: 10px;
+    display: inline-block; /* Display on the same line */
+}
+
+#coupon-button {
+    width: 60%;
+    padding: 10px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: inline-block; 
+    
+}
+#select-address {
+    width:60%
+}
+#order-id{
+    width: 40%;
+    padding: 1px;
+   
+    
+    display: inline-block; 
+}
+.btn btn-success{
+    width: 60%;
+}
+#select-wallet{
+    width:60% 
+}
+
+    </style>
+</head>
+
+<body>
+    <!-- Page Preloder -->
+
+    <% if (!cart) { %>
+        <h1>No order for checkout</h1>
+    <% } else { %>
+    <!-- Breadcrumb Section Begin -->
+   <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Checkout</h2>
+                        <div class="breadcrumb__option">
+                            <a href="/home">Home</a>
+                            <span>Checkout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+  
+    <!-- Breadcrumb Section End -->
+
+       <!-- Checkout Section Begin -->
+       <section class="checkout spad">
+        <div class="container">
+           
+            
+                  
+            <div class="checkout__form">
+                <h4>Billing Details</h4>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <!-- ... (your billing details content) ... -->
+                            <label for="Addres" id="selectedAddress" name="selectedAddress">Address</label>
+                            <a href="/address"><button id="btn">Add address</button></a>
+                            <% if (addresses?.addresses) { %>
+                            <% addresses.addresses.forEach((address,index) => { %>
+                                <div class="addresslist">
+                                    <input type="radio" name="selectedAddress" id="" value="<%= index %>">
+                                    <p><%= address.address %></p>
+                                    <p><%= address.streetAddress %> </p>
+                                    <p><%= address.phone %></p>
+                                    <p><%= address.city %></p>
+                                </div>
+                            <% }) %>
+                            <% } else { %>
+                                <p>No addresses available.</p>
+                            <% } %>
+
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="checkout__order">
+                                <h4>Your Order</h4>
+                                <div class="checkout__order__products">Products <span>Total</span></div>
+                                <ul class="cart_list">
+                                    <!-- ... (your order items) ... -->
+                                    <%
+                                     var total = 0;
+                                    cart.items.forEach(item => { %>
+                                     
+                                        <li class="cart_item clearfix">
+                                            
+                                            <div class="cart_item_info d-flex flex-md-row flex-column justify-content-between">
+                                                <div class="cart_item_name cart_info_col">
+                                                   <tr><%= item.product.name %>    &nbsp&nbsp &nbsp&nbsp&nbsp &nbsp<%= item.product.price  * item.quantity%></tr>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        
+                                    <%
+                                 total += item.product.price  * item.quantity;
+                                }); %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+
+          
+            <div class="untree_co-section">
+                <div class="container">
+   <div class="custom-control custom-radio">
+    <div class="checkout__form">
+        <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="shoping__continue">
+                            <div class="shoping__discount" >
+                                <h5>Discount Codes</h5>
+                                <!-- user/checkout.ejs -->
+
+<!-- Add a button or trigger to open the modal -->
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#couponModal" style="width: 60%">
+    View Available Coupons
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="couponModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Available Coupons</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- List of available coupons -->
+                <% availableCoupons.forEach(coupon => { %>
+                    <p><%= coupon.couponCode %> - <%= coupon.discountPercentage %>% Discount</p>
+                <% }) %>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Rest of your checkout page content -->
+
+ 
+                                <form action="#">
+                                    <input type="text" placeholder="Enter your coupon code" aria-label="Coupon-code" id="coupon-code">
+                                    <p id="expiry" ></p>
+                                    <button type="submit" style="background-color: rgb(91, 163, 91);" id="coupon-button" >APPLY COUPON</button>
+
+                                </form>
+                                
+                        </div>
+                    </div>
+                    <div class="checkout__order__subtotal">Subtotal ₹<span id="total-pay"><%= total %></span></div>
+            <div class="checkout__order__total">Total  ₹<span id="orderTotal"><%= total %></span></div><br>
+          <div class="checkout_order_total">Wallet Discount ₹<span  id="wallet-save">0.00</span>
+            <div class="checkout_order_total">Coupon Discount ₹<span  id="offer-price">0.00</span>
+                <div class="checkout_order_total">You Saved ₹<span  id="price-save">0.00</span>
+
+ </div>
+
+ <div class="row mb-5">
+                    <div class="col-md-12">
+                      <div class="card">
+                      <% if (!wallet) { %>
+                        <div class="card-body" id="message-wallet">
+                       <h3>Wallet</h3>
+            
+                       <p>Wallet Empty</p>
+                       </div>
+                       <% }else{ %>
+                        <div class="card-body" id="message-wallet">
+                          <h5 class="card-title">Wallet</h5>
+                         
+                          <button id="select-wallet"  class="btn btn-success">Select Wallet</button>
+                          <hr>
+                          <p class="card-text">Available Wallet Amount: ₹<span id="wallet-balance"><%= wallet.walletBalance %></span></p> 
+                        </div>
+                        <% } %>
+                      </div>
+                    </div>
+                  </div>
+
+                <h4>Select Payment</h4>
+               
+              </div>
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" name="payment-method" value="Razorpay" id="Razorpay">
+                <label class="custom-control-label" for="Razorpay">Razorpay</label>
+              </div>
+
+              <div class="custom-control custom-radio">
+                <input type="radio" id="COD" name="payment-method" value="COD" class="custom-control-input">
+                  <label for="COD" class="custom-control-label" id="payment-method">
+                  COD
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+
+              <div class="custom-control custom-radio">
+                <input type="radio" id="Wallet" name="payment-method" value="Wallet" class="custom-control-input">
+                  <label for="Wallet" class="custom-control-label" id="payment-method">
+                  Wallet
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+
+               
+             
+
+              <div id="select-address">
+                <button type="submit" id="place-order-address-button" class=" btn-btn-primary">Confirm</button>
+              </div>
+              
+              <input type="hidden" id="order-id">
+              <div id="place-order"></div>
+              <div id="pay-order"></div>
+              <div id="place-Checkout"></div>
+              
+        </div>
+ 
+    </div>
+    </div>
+    </div>
+    </div>
+    
+
+    </section>
+    <% } %>
+    <!-- Checkout Section End -->
+
+    <!-- Footer Section Begin -->
+    <footer class="footer spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__about__logo">
+                            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                        </div>
+                        <ul>
+                            <li>Address: 60-49 Road 11378 New York</li>
+                            <li>Phone: +65 11.188.888</li>
+                            <li>Email: hello@colorlib.com</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 offset-lg-1">
+                    <div class="footer__widget">
+                        <h6>Useful Links</h6>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">About Our Shop</a></li>
+                            <li><a href="#">Secure Shopping</a></li>
+                            <li><a href="#">Delivery infomation</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Our Sitemap</a></li>
+                        </ul>
+                        <ul>
+                            <li><a href="#">Who We Are</a></li>
+                            <li><a href="#">Our Services</a></li>
+                            <li><a href="#">Projects</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Innovation</a></li>
+                            <li><a href="#">Testimonials</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="footer__widget">
+                        <h6>Join Our Newsletter Now</h6>
+                        <p>Get E-mail updates about our latest shop and special offers.</p>
+                        <form action="#">
+                            <input type="text" placeholder="Enter your mail">
+                            <button type="submit" class="site-btn">Subscribe</button>
+                        </form>
+                        <div class="footer__widget__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="footer__copyright">
+                        <div class="footer__copyright__text"><p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p></div>
+                        <div class="footer__copyright__payment"><img src="img/payment-item.png" alt=""></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+    <!-- Js Plugins -->
+    
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+
+      $("#coupon-button").on("click", function (e) {
+        e.preventDefault();
+
+        let code = $("#coupon-code").val();
+        let orderTotalElement = $("#total-pay");
+        let orderTotal = parseFloat(orderTotalElement.text());
+        let offerPrice = $('#offer-price');
+        let priceSaved = $('#price-save');
+        let orderId = $('#order-id').val();
+
+        if (code.length < 4) {
+            alert("Code should contain at least 4 characters");
+            return;
+        }
+
+        $.ajax({
+            url: '/use-coupon',
+            method: 'POST',
+            data: {
+                couponCode: code,
+                orderTotal:orderTotal,
+                orderId: orderId
+            },
+            success: function (response) {
+                console.log(response);
+
+                if (response.expired) {
+                    console.log("Code has expired");
+
+                    $("#expiry").html(response.expired);
+                    setTimeout(() => {
+                        $("#expiry").html('');
+                    }, 5000);
+
+                } else if (response.invalid) {
+                    console.log("Invalid coupon code ");
+
+                    $("#expiry").html(response.invalid);
+                    setTimeout(() => {
+                        $("#expiry").html('');
+                    }, 5000);
+                } else if (response.code) {
+                    let discountPercentage = response.code;
+                    let discountAmount = (orderTotal / 100) * discountPercentage;
+                    let newTotal = orderTotal - discountAmount;
+
+                    console.log(newTotal);
+                    orderTotalElement.text(newTotal);
+                    offerPrice.text(newTotal);
+                    priceSaved.text(discountAmount);
+                } else if (response.used) {
+                    $("#expiry").html(response.used)
+
+                    setTimeout(() => {
+                        $("#expiry").html('')
+                    }, 5000);
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+});
+
+        $(document).ready(function () {
+            const  walletSave = document.getElementById('wallet-save').textContent;
+console.log(walletSave)
+          $('#place-order-address-button').on('click', function (e) {
+            const addressId = $('input[type=radio][name="selectedAddress"]:checked').val();
+            const paymentMethod = $('input[type=radio][name="payment-method"]:checked').val();
+            const orderTotal = document.getElementById('orderTotal').innerHTML;
+            const orderTotalPrice  = document.getElementById('total-pay').innerHTML;
+      
+      
+            console.log(orderTotal + "hloo");
+      
+            $.ajax({
+              type: 'POST',
+              url: '/checkout-address',
+              data: {
+                addressId: addressId,
+                paymentMethod: paymentMethod,
+                walletDiscount: walletSave,
+                orderTotal: orderTotal,
+                orderTotalPrice: orderTotalPrice
+              },
+              success: function (orderId) {
+                if (paymentMethod === "COD") {
+                  // Handling for Cash on Delivery
+                  document.getElementById('place-order').innerHTML = `<a href="/place-order/${orderId}"><button class="btn btn-primary small-button">Place Order</button></a>`;
+                  document.getElementById('order-id').value = orderId;
+                } else if (paymentMethod === "Razorpay") {
+                  // Handling for Razorpay payment
+                  document.getElementById('pay-order').innerHTML = `<button class="btn btn-primary small-button">Pay Now</button>`;
+                  document.getElementById('order-id').value = orderId;
+                }else if (paymentMethod === "Wallet") {
+                    document.getElementById('place-order').innerHTML = `<a href="/place-order/${orderId}"><button class="btn btn-primary small-button">Place Order</button></a>`;
+                  document.getElementById('order-id').value = orderId;
+                }
+              },
+              error: function (error) {
+                console.log(error);
+              }
+            });
+          });
+      
+          $('#pay-order').on('click', () => {
+            const orderId = document.getElementById('order-id').value;
+            let orderTotalElement = $("#total-pay");
+        let orderTotal = parseFloat(orderTotalElement.text());
+            // AJAX call to handle payment
+            $.ajax({
+              type: 'POST',
+              url: '/checkoutpayment',
+              data: {
+                orderId: orderId,
+                orderTotal: orderTotal
+              },
+              success: function (response) {
+                console.log(response);
+               
+
+                // Handle response, e.g., initiate Razorpay payment
+                razorpayPayment(response);
+              },
+              error: function (error) {
+                console.log(error);
+              },
+            });
+          });
+      
+          function razorpayPayment(order) {
+            // Your existing Razorpay payment function here
+            var options = {
+              // ... (your Razorpay options)
+              "key": "rzp_test_KFM2lhon6EjNAF",
+"amount": order.amount * 100,
+"currency": "INR",
+"name": "OGANI",
+"description": "Test Transaction",
+"image": "C:\ECOMMERCE\ogani-master\img\logo.png",
+"order_id": order.id,
+"handler": function (response) {
+
+    verifyPayment(response, order);
+},
+"prefill": {
+    "name": "Gaurav Kumar",
+    "email": "gaurav.kumar@example.com",
+    "contact": "9000090000"
+},
+"notes": {
+    "address": "Razorpay Corporate Office"
+},
+"theme": {
+    "color": "#243247"
+}
+            };
+            const rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+              verifyPayment(response, order);
+            });
+
+            rzp1.open();
+
+          }
+      
+          function verifyPayment(payment, order) {
+    const orderId = document.getElementById('order-id').value;
+    
+    console.log("Verifying payment for order:", orderId, "Payment details:", payment);
+
+
+    $.ajax({
+      url: '/verifiedpayment',
+      data: {
+        orderId,
+        order,
+        payment,
+
+      },
+      method: 'post',
+      success: (response) => {
+        if (response.status) {
+          console.log(response.status);
+          alert('payment success');
+          location.href = `/place-order/${orderId}`;
+        } else {
+          location.href = '/payment-failed';
+                }
+              }
+            });
+          }
+        });
+
+        
+
+        document.getElementById('select-wallet').addEventListener('click', () => {
+  const orderId = document.getElementById('order-id').textContent;
+  let orderTotal = document.getElementById('orderTotal').textContent;
+
+  console.log(orderId);
+
+  fetch('/use-wallet', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      data: orderTotal,
+      orderId: orderId
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.walletBalance > 1) {
+      document.getElementById('wallet-balance').innerHTML = data.walletBalance;
+      document.getElementById('orderTotal').innerHTML = data.totalBalance;
+      document.getElementById('wallet-save').innerHTML = data.saved;
+    } else {
+      document.getElementById('message-wallet').innerHTML = '<h3>Wallet balance has been discounted from your new order</h3>';
+      document.getElementById('wallet-save').innerHTML = data.saved;
+      document.getElementById('orderTotal').innerHTML = data.totalBalance;
+    }
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+});
+
+
+
+
+
+
+
+
+      </script>
+      </body>
+      </html>
+      
+
+
+
+    
+ 

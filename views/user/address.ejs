@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Address</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .address-form {
+            background-color: #fff;
+            padding: 20px; /* Adjusted padding */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 450px; /* Adjusted width */
+            margin-top: 70px;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .address-form h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .checkout__input {
+            margin-bottom: 15px;
+        }
+
+        .checkout__input p {
+            margin: 0;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .checkout__input input {
+            width: calc(100% - 20px); /* Adjusted width */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: calc(100% - 20px); /* Adjusted width */
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            color: red;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+    </style>
+   <script>
+    function validateAddress() {
+    var addressValue = document.getElementsByName("address")[0].value.trim();
+    var addressError = document.getElementById("address-error");
+    if (addressValue === "") {
+            addressError.innerHTML = "This field is required.";
+        } else {
+            addressError.innerHTML = "";
+        }
+    // Check if the address is empty or consists of only spaces
+    if (/^\s*$/.test(addressValue)) {
+        addressError.innerHTML = "Address cannot consist of only spaces.";
+        return false;
+    } else {
+        addressError.innerHTML = "";
+    }
+
+    // Check for valid characters in the address
+    if (!/^[a-zA-Z\s]*$/.test(addressValue)) {
+        addressError.innerHTML = "Address can only contain letters and spaces.";
+        return false;
+    } else {
+        addressError.innerHTML = "";
+    }
+
+    return true; // Address is valid
+
+}
+
+    function validateStreetAddress() {
+        var streetAddressValue = document.getElementsByName("streetAddress")[0].value.trim();
+        var streetAddressError = document.getElementById("streetaddress-error");
+    
+        if (streetAddressValue === "") {
+            streetAddressError.innerHTML = "This field is required.";
+        } else {
+            streetAddressError.innerHTML = "";
+        }
+    
+    // Check if the address is empty or consists of only spaces
+    if (/^\s*$/.test(streetAddressValue)) {
+        streetAddressError.innerHTML = "StreetAddress cannot consist of only spaces.";
+        return false;
+    } else {
+        streetAddressError.innerHTML = "";
+    }
+    if (!/^[a-zA-Z0-9\s]*$/.test(addressValue)) {
+    addressError.innerHTML = "Address can only contain letters, numbers, and spaces.";
+    return false;
+} else {
+    addressError.innerHTML = "";
+}
+return true; // Address is valid
+
+    }
+
+    function validateApartment() {
+        var apartmentValue = document.getElementsByName("apartment")[0].value.trim();
+        var apartmentError = document.getElementById("apartment-error");
+        if (apartmentValue === "") {
+            apartmentError.innerHTML = "This field is required.";
+        } else {
+            apartmentError.innerHTML = "";
+        }
+    
+    // Check if the address is empty or consists of only spaces
+    if (/^\s*$/.test(apartmentValue)) {
+        apartmentError.innerHTML = "It cannot consist of only spaces.";
+        return false;
+    } else {
+        apartmentError.innerHTML = "";
+    }
+    if (!/^[a-zA-Z0-9\s]*$/.test(addressValue)) {
+    apartmentError.innerHTML = "Address can only contain letters, numbers, and spaces.";
+    return false;
+} else {
+    apartmentError.innerHTML = "";
+}
+return true; // Address is valid
+
+    }
+
+    function validateCity() {
+        var cityValue = document.getElementsByName("city")[0].value.trim();
+        var cityError = document.getElementById("city-error");
+        if (cityValue === "") {
+            cityError.innerHTML = "This field is required.";
+        } else {
+        cityError.innerHTML = "";
+        }
+    
+    // Check if the address is empty or consists of only spaces
+    if (/^\s*$/.test(cityValue)) {
+        cityError.innerHTML = "It cannot consist of only spaces.";
+        return false;
+    } else {
+        cityError.innerHTML = "";
+    }
+    if (!/^[a-zA-Z0-9\s]*$/.test(cityValue)) {
+    cityError.innerHTML = "Address can only contain letters, numbers, and spaces.";
+    return false;
+} else {
+    cityError.innerHTML = "";
+}
+return true; // Address is valid
+
+         }
+
+    function validatePostCode() {
+        var postcodeValue = document.getElementsByName("postcode")[0].value.trim();
+        var postcodeError = document.getElementById("postcode-error");
+        if (postcodeValue === "") {
+            postcodeError.innerHTML = "This field is required.";
+        } else if (!/^\d{6}$/.test(postcodeValue)) {
+            postcodeError.innerHTML = "Invalid postcode format (e.g., 12345).";
+        } else {
+            postcodeError.innerHTML = "";
+        }
+    }
+
+    function validatePhone() {
+        var phoneValue = document.getElementsByName("phone")[0].value.trim();
+        var phoneError = document.getElementById("phone-error");
+        if (phoneValue === "") {
+            phoneError.innerHTML = "This field is required.";
+        } else if (!/^\d{10}$/.test(phoneValue)) {
+            phoneError.innerHTML = "Invalid phone number format (10 digits only).";
+        } else {
+            phoneError.innerHTML = "";
+        }
+    }
+
+    function validateEmail() {
+        var emailValue = document.getElementsByName("email")[0].value.trim();
+        var emailError = document.getElementById("email-error");
+        var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (emailValue === "") {
+            emailError.innerHTML = "This field is required.";
+        } else if (!emailRegex.test(emailValue)) {
+            emailError.innerHTML = "Invalid email address.";
+        } else {
+            emailError.innerHTML = "";
+        }
+    }
+
+    
+    function validateForm(event) {
+        var form = document.forms["addressForm"];
+        var requiredFields = ["address", "streetAddress", "apartment", "city", "postcode", "phone", "email"];
+        var isValid = true;
+
+        // Reset previous error messages
+        requiredFields.forEach(function (field) {
+            document.getElementById(field + "-error").innerHTML = "";
+        });
+
+        // Check if required fields are not empty
+        requiredFields.forEach(function (field) {
+            var fieldValue = form[field].value.trim();
+            if (fieldValue === "") {
+                document.getElementById(field + "-error").innerHTML = "This field is required.";
+                isValid = false;
+            }
+        });
+
+        // Check if any field is empty
+        if (!isValid) {
+            document.getElementById("general-error").innerHTML = "All fields are required.";
+            event.preventDefault(); // Prevent form submission
+        } else {
+            document.getElementById("general-error").innerHTML = ""; // Clear general error message
+        }
+    }
+
+</script>
+</head>
+<body>
+    <div class="address-form">
+        <form action="/add-address" method="post" onsubmit="validateForm(event)">
+            <h1>Add Address</h1>
+            <div class="checkout__input">
+                <p>Address<span>*</span></p>
+                <input type="text" name="address" class="form-control" onkeyup="validateAddress()" required>
+                <div id="address-error" class="error-message"></div>
+            </div>       
+            <div class="checkout__input">
+                <p>Street Address<span>*</span></p>
+                <input type="text" name="streetAddress" class="form-control" onkeyup="validateStreetAddress()" required>
+                <div id="streetaddress-error" class="error-message"></div>  
+            </div>
+            <div class="checkout__input">
+                <p>Apartment<span>*</span></p>
+                <input type="text" name="apartment" class="form-control" onkeyup="validateApartment()" required>
+                <div id="apartment-error" class="error-message"></div>
+            </div>
+            <div class="checkout__input">
+                <p>City<span>*</span></p>
+                <input type="text" name="city" class="form-control" onkeyup="validateCity()" required>
+                <div id="city-error" class="error-message"></div>
+            </div>            
+            <div class="checkout__input">
+                <p>Postcode / ZIP<span>*</span></p>
+                <input type="Number" name="postcode" class="form-control" onkeyup="validatePostCode()" required>
+                <div id="postcode-error" class="error-message"></div>
+            </div>
+            <div class="checkout__input">
+                <p>Phone<span>*</span></p>
+                <input type="Number" name="phone" class="form-control" onkeyup="validatePhone()" required>
+                <div id="phone-error" class="error-message"></div>
+            </div>
+            <div class="checkout__input">
+                <p>Email<span>*</span></p>
+                <input type="text" name="email" class="form-control" onkeyup="validateEmail()" required>
+                <div id="email-error" class="error-message"></div>
+            </div>
+            <!-- Add this div to display general error message -->
+<div id="general-error" class="error-message"></div>
+
+            <button type="submit">Add Address</button>
+        </form>
+    </div>
+    
+    <script>
+         var addressError = document.getElementById("address-error");
+  var streetAddressError = document.getElementById("streetaddress-error");
+  var apartmentError = document.getElementById("apartment-error");
+  var cityError = document.getElementById("city-error");
+  var postCodeError = document.getElementById("postcode-error");
+
+  var phoneError = document.getElementById("phone-error");
+
+  var emailError = document.getElementById("email-error");
+
+      
+
+    </script>
+</body>
+</html>

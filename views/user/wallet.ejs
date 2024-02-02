@@ -1,0 +1,123 @@
+<%- include('../partials/user/userHeader.ejs') %>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Page</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e3e5e9, #e9eaec);
+            color: #131111;
+            margin: 0;
+            padding: 0;
+            
+           
+        }
+
+        #wallet-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #balance {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #transaction-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .transaction {
+            margin-bottom: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .credit {
+            background-color: rgba(0, 255, 60, 0.5);
+            color: #0c0c0c;
+        }
+
+        .debit {
+            background-color: rgba(255, 12, 32, 0.5);
+            color: #141313;
+        }
+
+        #add-funds, #withdraw-funds {
+            margin-top: 20px;
+            font-size: 18px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: filter 0.3s ease;
+        }
+
+        #add-funds {
+            background-color: #28a745;
+        }
+
+        #withdraw-funds {
+            background-color: #dc3545;
+        }
+
+        #add-funds:hover, #withdraw-funds:hover {
+            filter: brightness(85%);
+        }
+
+        .transaction-time {
+            font-size: 14px;
+            color: #181616;
+        }
+    </style>
+</head>
+<body>
+
+<div id="wallet-container" class="container">
+    <% if (balance) { %>
+        <h2 class="text-center mb-4">Your Wallet</h2>
+        <div id="balance" class="text-center mb-4">Balance: ₹ <%= balance.walletBalance %>.00</div>
+        <% } else { %>
+            <h2 class="text-center mb-4">Your Wallet is Empty</h2>
+        <% } %>
+
+        <h3 class="mb-3">Transaction History</h3>
+        <ul id="transaction-list">
+         <% if (transactions) { %>
+            <% transactions.transaction.forEach((trans)=> { %>
+                <li class="transaction <%= trans.mode === 'Credit' ? 'credit' : 'debit' %>">
+                    <%= trans.mode %>&nbsp;
+                    <%= trans.amount %>
+                    <span class="transaction-time"><%= trans.time.toLocaleDateString() %> <%= trans.time.toLocaleTimeString() %></span>
+                </li>
+            <% }); %>
+         <% }else{ %>
+            <h4>No transaction till now</h4>
+            <% } %>
+        </ul>
+    
+
+    
+</div>
+
+</body>
+</html>

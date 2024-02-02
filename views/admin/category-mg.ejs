@@ -1,0 +1,181 @@
+<%- include('../partials/admin/adminHeader.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Category Management</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.6.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background: whitesmoke;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      h1 {
+        color:#333;
+        margin-bottom: 20px;
+      }
+      h2{
+        color:#333;
+      }
+
+      .input-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .btn-add {
+        background-color: green;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+      }
+
+      .category-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+        width: 100%;
+      }
+
+      .category-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        padding: 15px;
+        background-color: #f8f9fa; /* Use a light gray background */
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+      }
+
+      .category-list li span {
+        flex: 1;
+        font-weight: bold;
+      }
+
+      .category-list li button {
+        cursor: pointer;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        margin-left: 10px;
+      }
+
+      .category-list li button.edit {
+        background-color: #28a745;
+        color: #fff;
+      }
+
+      .category-list li button.delete {
+        background-color: #dc3545;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <% if (typeof success !== 'undefined' && success !== null) { %>
+      <div class="alert alert-danger" role="alert" aria-live="assertive" aria-atomic="true" id="myToast"
+      data-bs-delay="2000">
+  
+  
+          <%= success %>
+      </div>
+  <% } %>
+    <div class="container">
+      <h1>Category Management</h1>
+
+      <form class="input-group" action="/admin/addCategory" method="post" onsubmit="return validateForm()">
+        <input
+          type="text"
+          class="form-control"
+          name="category"
+          id="category"
+          placeholder="New Category" required
+        />
+        <button class="btn btn-add" type="submit">Add</button>
+      </form>
+
+      <h2>Categories</h2>
+
+      <ul class="category-list">
+        <% if (!category || category.length === 0) { %>
+        <li>No categories</li>
+        <% } else { %> <% category.forEach((cat) => { %>
+        <li>
+          <span><%= cat.categoryName %></span>
+          
+          <% if (cat.active) { %>
+          <a href="/admin/deactivate/<%= cat._id %>">
+            <button class="btn btn-danger">Deactivate</button>
+          </a>
+          <% } else { %>
+          <a href="/admin/activate/<%= cat._id %>">
+            <button class="btn btn-success">Activate</button>
+          </a>
+          <% } %>
+          <a href="/admin/edit-category/<%= cat._id %>">
+            <button class="btn btn-info edit">Edit</button>
+          </a>
+        </li>
+        <% }) %> <% } %>
+      </ul>
+    </div>
+
+    <script>
+     /*function validateForm() {
+          const category = document.getElementById('category').value.trim();
+
+          if (category.trim() === "") {
+    alert("Category name is required");
+    return false;
+}
+
+          // You can add more complex validation here if needed
+
+          return true;
+      }
+*/
+      document.addEventListener('DOMContentLoaded', function () {
+          const myToastElement = document.getElementById('myToast');
+
+          const myToast = new bootstrap.Toast(myToastElement, {
+              delay: 2000
+          }); // Set delay to 2000ms (2 seconds)
+          myToast.show();
+      });
+  </script>
+  </body>
+</html>

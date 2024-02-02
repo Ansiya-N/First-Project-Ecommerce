@@ -1,0 +1,130 @@
+
+<%- include('../partials/admin/adminHeader.ejs') %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .order-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .order-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+
+        .order-item h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .order-details-btn {
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+        }
+
+        /* Set table border color to green */
+        .table-bordered {
+            border-color: #28a745;
+        }
+
+        /* Set table heading background color to green */
+        .table-bordered thead th {
+            background-color: #28a745;
+            color: #fff; /* Set text color to white for better visibility */
+        }
+         /* Pagination styles */
+         .pagination .page-item.active .page-link {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .pagination .page-link {
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Order Details</h1>
+
+        <% if (order && order.length > 0) { %>
+
+            <div class="order-container">
+                <!-- Add the 'table-bordered' class to the table -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">User ID</th>
+                            <th scope="col">Order ID</th>
+                            <th scope="col">Ordered Date</th>
+                            <th scope="col">Total Amount</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% order.forEach(odr => { %>
+                            <tr>
+                                <td><%= odr.userId %></td>
+                                <td><%= odr._id %></td>
+                                <td><%= odr.formattedDateOrdered %></td>
+                                <td>₹<%= odr.totalPrice %></td>
+                                <td>
+                                    <a href="/admin/view-order-details-admin/<%= odr._id %>" class="btn btn-success order-details-btn">View Details</a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+
+        <% } else { %>
+            <p class="alert alert-danger">Order not found</p>
+        <% } %>
+
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Include Bootstrap JS and dependencies (optional) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<%- include('../partials/admin/adminHeader.ejs') %>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel - User Management</title>
+  <style>
+    /* Your existing styles here */
+    
+
+
+h1{
+  text-align: center;
+  background-color: green;
+  color: #fff;
+  padding: 20px 0;
+  margin: 0;
+}
+
+h2{
+  text-align: center;
+  font-family:  sans-serif;
+  color: #333;
+  font-size: 40px;
+  padding: 20px 0;
+  margin: 0;
+}
+
+
+.container {
+  padding: 80px;
+}
+
+table {
+  width: 100%;
+  background-color: #fff;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color:green;
+  color: #fff;
+}
+
+.actions {
+  text-align: center;
+}
+
+.button {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: green;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.button.edit {
+  background-color: #985bde;
+}
+
+.button.delete {
+  background-color: #dc3545;
+}
+
+.form {
+  width: 50%;
+  background-color: #fff;
+  padding: 20px;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form button {
+  background-color: #337ab7;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .pagination-button {
+      display: inline-block;
+      padding: 10px;
+      background-color: #0a8d26;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0 5px;
+    }
+
+    .pagination-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>User Management</h2>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Actions</th>
+    </tr>
+    <% users.forEach((person, index) => { %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td><%= person.name %></td>
+        <td><%= person.email %></td>
+        <td><%= person.phone %></td>
+
+        <td class="actions">
+          <% if (!person.status) { %>
+            <a href="/admin/unblock/<%= person._id %>" class="button delete">Block</a>
+          <% } else { %>
+            <a href="/admin/block/<%= person._id %>" class="button edit">Unblock</a>
+          <% } %>
+        </td>
+
+      </tr>
+    <% }) %>
+  </table>
+
+  <div class="pagination-container">
+    <button class="pagination-button" id="prev-button" title="Previous page" aria-label="Previous page">
+      &lt;
+    </button>
+
+    <div id="pagination-numbers">
+      <!-- You may add your pagination numbers here if needed -->
+    </div>
+
+    <button class="pagination-button" id="next-button" title="Next page" aria-label="Next page">
+      &gt;
+    </button>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+  $(document).ready(function () {
+    let currentPage = 1;
+    const pageSize = 5; // Set your desired page size
+
+    function fetchUsers(page) {
+      $.ajax({
+        method: 'post',
+        url: '/admin/user-pagination', // Update the endpoint to match your server route
+        data: {
+          page: page,
+          pageSize: pageSize
+        },
+        success: function (res) {
+          const userList = document.querySelector('table tbody');
+
+          if (res && res.users.length > 0) {
+            let userHTML = '';
+
+            res.users.forEach((user, index) => {
+ let actualIndex = (currentPage - 1) * pageSize + index + 1;
+ userHTML += `
+    <tr>
+      <td>${actualIndex}</td>
+      <td>${user.name}</td>
+      <td>${user.email}</td>
+      <td>${user.phone}</td>
+      <td class="actions">
+        ${!user.status
+          ? `<a href="/admin/unblock/${user._id}" class="button delete">Block</a>`
+          : `<a href="/admin/block/${user._id}" class="button edit">Unblock</a>`
+        }
+      </td>
+    </tr>
+ `;
+});
+            userList.innerHTML = userHTML;
+          }
+        },
+        error: function (error) {
+          console.log(error);
+        }
+      });
+    }
+
+    fetchUsers(currentPage);
+
+    // Pagination button click event handlers
+    $('#prev-button').on('click', function () {
+      if (currentPage > 1) {
+        currentPage--;
+        fetchUsers(currentPage);
+      }
+    });
+
+    $('#next-button').on('click', function () {
+      currentPage++;
+      fetchUsers(currentPage);
+    });
+  });
+</script>
+
+</body>
+</html>
