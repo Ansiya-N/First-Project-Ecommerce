@@ -25,55 +25,10 @@ module.exports.login = (req, res) => {
   }
 };
 
-module.exports.dash = async (req, res) => {
-  try {
-    const year = req.query.year || null;
-    const interval = req.query.interval || 'monthly';
+module.exports.dash = (req,res)=>{
+  res.render('admin/dash');
 
-    const matchStage = {
-      'dateOrdered': {
-        $gte: new Date(year ? `${year}-01-01` : '2023-01-01'),
-        $lt: new Date(year ? `${parseInt(year) + 1}-01-01` : '2025-01-01')
-      }
-    };
-
-    if (interval === 'monthly') {
-      matchStage['dateOrdered']['$lt'] = new Date(year ? `${parseInt(year) + 1}-01-01` : '2025-01-01');
-    }
-
-    const chartData = await Order.aggregate([
-      { $match: matchStage },
-      {
-        $group: {
-          _id: {
-            year: { $year: '$dateOrdered' },
-            month: { $month: '$dateOrdered' }
-          },
-          orderCount: { $sum: 1 }
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          year: '$_id.year',
-          month: '$_id.month',
-          orderCount: 1
-        }
-      },
-      {
-        $sort: {
-          year: 1,
-          month: 1
-        }
-      }
-    ]);
-
-    commonResponseHandler(res, chartData);
-
-  } catch (error) {
-    commonResponseHandler(res, error);
-  }
-};
+}
 
 module.exports.verifyAdmin = async (req, res, next) => {
   try {
