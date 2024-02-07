@@ -55,7 +55,7 @@ module.exports.userLogedOrNot = async(req,res,next)=>{
 module.exports.adminSessionCheck = (req,res,next)=>{
   try {
     if(req.session.Admin){
-      res.redirect('/admin/product-mg');
+      res.redirect('/admin/dashboard');
      
     }else{
       next();
